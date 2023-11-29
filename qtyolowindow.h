@@ -1,6 +1,6 @@
 #pragma once
 #include <QtWidgets/QMainWindow>
-#include "ui_qtyolowindow.h"
+#include "ui_qtyolowindow2.h"
 #include <opencv2/opencv.hpp>
 #include <opencv2/core.hpp>
 #include "myDahengCamera.h"
@@ -9,7 +9,7 @@
 #include <QFileDialog>
 #include <QThread>
 
-extern bool caiji_flag;
+extern bool caiji_flag;//检测 刷新线程用的标志位
 extern bool detect_flag;
 extern bool save_flag;
 
@@ -17,7 +17,7 @@ class ImageThread : public QThread
 {
 	Q_OBJECT
 public:
-	ImageThread(){}
+	ImageThread() {}
 signals:
 	void detectSignal(const QImage& Qtemp_image_);
 protected:
@@ -26,11 +26,11 @@ protected:
 
 class QTyoloWindow : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    QTyoloWindow(QWidget *parent = nullptr);
-    ~QTyoloWindow();
+	QTyoloWindow(QWidget *parent = nullptr);
+	~QTyoloWindow();
 
 	bool IsCamOpen_flag;//相机是否打开标志位
 	bool IsCamAcq_flag;//相机是否采集标志位
@@ -39,12 +39,13 @@ public:
 	bool IsDetoneimg_flg;//是否检测单张标志位
 	std::string filePathStr;//用于接收打开的图片路径
 	DahengCamera* cam;
+	QTimer* timer;
+
 	ImageThread* img_thread;
-	//QTimer* timer;
 
 private:
-	Ui::QTyoloWindowClass ui;
-// 自定义的槽函数
+	Ui::QTyoloWindow2Class ui;
+	// 自定义的槽函数
 private slots:
 	void bp_clearMessage_clicked();//清空消息
 	void bp_openCam_clicked();//打开相机
@@ -52,7 +53,9 @@ private slots:
 	void bp_startAcq_clicked();//开始采集
 	void bp_stopAcq_clicked();//结束采集
 	void timerTimeout();
+
 	void refreshimage(const QImage& Qtemp_image_);
+
 	void bp_startDet_clicked();//开始检测
 	void bp_stopDet_clicked();//结束检测
 	void bp_startsaveimg_clicked();//开始保存

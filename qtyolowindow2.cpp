@@ -27,7 +27,7 @@ QTyoloWindow::QTyoloWindow(QWidget *parent)
 	connect(ui.start_dec_btn_image, SIGNAL(clicked()), this, SLOT(bp_detoneimg_clicked()));
 	//测试代码
 	ui.textBrowser->append("welcome93");
-	cv::Mat img0 = cv::imread("C:/Users/DELL/Desktop/1.jpg");
+	cv::Mat img0 = cv::imread("C:/Users/MY/Desktop/1.jpg");
 	cv::cvtColor(img0, img0, COLOR_BGR2RGB);
 	QImage Qtemp = QImage((const unsigned char*)(img0.data), img0.cols, img0.rows, img0.step, QImage::Format_RGB888);
 	ui.label->setPixmap(QPixmap::fromImage(Qtemp));

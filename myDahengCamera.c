@@ -1,5 +1,7 @@
 #include "myDahengCamera.h"
 cv::Mat rgb_img(100, 100, CV_8UC3); 
+std::mutex mtx;//互斥锁
+bool once_rgbimg = 0;  //rgb_img重新分配内存标志位 只进行一次
 
 DahengCamera::DahengCamera()
 {
@@ -98,15 +100,29 @@ void DahengCamera::thread_fuc()
 void DahengCamera::CSampleCaptureEventHandler::DoOnImageCaptured(CImageDataPointer& objImageDataPointer, void* pUserParam)
 {
 	if (objImageDataPointer->GetStatus() == GX_FRAME_STATUS_SUCCESS)
-	{
-		uint64_t nWidth = objImageDataPointer->GetWidth();
-		uint64_t nHeight = objImageDataPointer->GetHeight();
-		cv::Mat img(objImageDataPointer->GetHeight(), objImageDataPointer->GetWidth(), CV_8UC3);
-		memcpy(img.data, objImageDataPointer->ConvertToRGB24(GX_BIT_0_7, GX_RAW2RGB_NEIGHBOUR, true), (objImageDataPointer->GetHeight())*(objImageDataPointer->GetWidth()) * 3);
-		cv::flip(img, img, 0);
+	{	
+		//uint64_t nWidth = objImageDataPointer->GetWidth();
+		//uint64_t nHeight = objImageDataPointer->GetHeight();
+
+		//cv::Mat img(objImageDataPointer->GetHeight(), objImageDataPointer->GetWidth(), CV_8UC3);
+		//memcpy(img.data, objImageDataPointer->ConvertToRGB24(GX_BIT_0_7, GX_RAW2RGB_NEIGHBOUR, true), (objImageDataPointer->GetHeight())*(objImageDataPointer->GetWidth()) * 3);
+		//cv::flip(img, img, 0);
+		mtx.lock();
+		if (once_rgbimg == 0)
+		{
+			rgb_img.create(objImageDataPointer->GetHeight(), objImageDataPointer->GetWidth(), CV_8UC3);
+			once_rgbimg = 1;
+		}
+		memcpy(rgb_img.data, objImageDataPointer->ConvertToRGB24(GX_BIT_0_7, GX_RAW2RGB_NEIGHBOUR, true), (objImageDataPointer->GetHeight())*(objImageDataPointer->GetWidth()) * 3);
+		cv::flip(rgb_img, rgb_img, 0);
+		mtx.unlock();
+		this_thread::sleep_for(1ms);
+		//mtx.lock();
 		//重新给rgb_img分配空间，分配的和拍摄到的一样
-		rgb_img.create(objImageDataPointer->GetHeight(), objImageDataPointer->GetWidth(), CV_8UC3);
-		rgb_img = img.clone();//把得到的img给全局变量rgb_img
+		//rgb_img.create(objImageDataPointer->GetHeight(), objImageDataPointer->GetWidth(), CV_8UC3);
+		//rgb_img = img.clone();//把得到的img给全局变量rgb_img
+		//mtx.unlock();
+		//this_thread::sleep_for(1ms);
 		
 	}
 }

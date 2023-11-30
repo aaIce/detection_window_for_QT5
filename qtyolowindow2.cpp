@@ -16,6 +16,12 @@ QTyoloWindow::QTyoloWindow(QWidget *parent)
 	connect(ui.close_btn, SIGNAL(clicked()), this, SLOT(bp_closeCam_clicked()));
 	connect(ui.start_btn, SIGNAL(clicked()), this, SLOT(bp_startAcq_clicked()));
 	connect(ui.end_btn, SIGNAL(clicked()), this, SLOT(bp_stopAcq_clicked()));
+	//选择权重并加载  用作实时监测
+	connect(ui.load_model_btn, SIGNAL(clicked()), this, SLOT(bp_choose_weight()));
+	//选择权重并加载  用作图片识别
+	connect(ui.load_model_btn_2, SIGNAL(clicked()), this, SLOT(bp_choose_weight()));
+
+	connect(ui.choose_path_btn, SIGNAL(clicked()), this, SLOT(bp_choose_dirpath()));
 	//开始检测 结束检测
 	connect(ui.start_dec_btn, SIGNAL(clicked()), this, SLOT(bp_startDet_clicked()));
 	connect(ui.end_dec_btn, SIGNAL(clicked()), this, SLOT(bp_stopDet_clicked()));
@@ -27,7 +33,7 @@ QTyoloWindow::QTyoloWindow(QWidget *parent)
 	connect(ui.start_dec_btn_image, SIGNAL(clicked()), this, SLOT(bp_detoneimg_clicked()));
 	//测试代码
 	ui.textBrowser->append("welcome93");
-	cv::Mat img0 = cv::imread("C:/Users/MY/Desktop/1.jpg");
+	cv::Mat img0 = cv::imread("C:/Users/tianmingYun/Desktop/1.png");
 	cv::cvtColor(img0, img0, COLOR_BGR2RGB);
 	QImage Qtemp = QImage((const unsigned char*)(img0.data), img0.cols, img0.rows, img0.step, QImage::Format_RGB888);
 	ui.label->setPixmap(QPixmap::fromImage(Qtemp));
@@ -150,6 +156,29 @@ void QTyoloWindow::timerTimeout()
 			ui.label->setPixmap(QPixmap::fromImage(Qtemp));
 			ui.label->setScaledContents(1);
 		}
+	}
+}
+void QTyoloWindow::bp_choose_weight()
+{
+	QString filePath = QFileDialog::getOpenFileName(nullptr, "Select a file", "", "Text Files (*.onnx)");
+
+	if (!filePath.isEmpty()) 
+	{
+		ui.choose_weight->setText(filePath);// 文件路径不为空，可以进行相应操作
+		ui.choose_weight_2->setText(filePath);
+	}
+	/*else
+	{
+		QMessageBox::critical(nullptr, "Error", "no path");
+	}*/
+}
+void QTyoloWindow::bp_choose_dirpath()
+{
+	QString directoryPath = QFileDialog::getExistingDirectory(nullptr, "Select a directory", "", QFileDialog::ShowDirsOnly);
+
+	if (!directoryPath.isEmpty()) 
+	{
+		ui.choose_imgpath->setText(directoryPath);// 文件夹路径不为空，可以进行相应操作
 	}
 }
 void QTyoloWindow::bp_startDet_clicked()

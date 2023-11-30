@@ -56,6 +56,8 @@ private slots:
 
 	void refreshimage(const QImage& Qtemp_image_);
 
+	void bp_choose_weight();  //选择权重并加载
+	void bp_choose_dirpath();  //选择文件夹路径 保存图片
 	void bp_startDet_clicked();//开始检测
 	void bp_stopDet_clicked();//结束检测
 	void bp_startsaveimg_clicked();//开始保存

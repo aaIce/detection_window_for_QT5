@@ -1,5 +1,5 @@
 #include "qtyolowindow2.h"
-using namespace cv;
+
 bool caiji_flag = 0;
 bool detect_flag = 0;
 bool save_flag = 0;
@@ -20,6 +20,8 @@ QTyoloWindow::QTyoloWindow(QWidget *parent)
 	connect(ui.load_model_btn, SIGNAL(clicked()), this, SLOT(bp_choose_weight()));
 	//选择权重并加载  用作图片识别
 	connect(ui.load_model_btn_2, SIGNAL(clicked()), this, SLOT(bp_choose_weight()));
+	//选择类别文件
+	connect(ui.choose_classes_btn, SIGNAL(clicked()), this, SLOT(bp_choose_classes()));
 
 	connect(ui.choose_path_btn, SIGNAL(clicked()), this, SLOT(bp_choose_dirpath()));
 	//开始检测 结束检测
@@ -34,13 +36,17 @@ QTyoloWindow::QTyoloWindow(QWidget *parent)
 	//测试代码
 	ui.textBrowser->append("welcome93");
 	cv::Mat img0 = cv::imread("C:/Users/tianmingYun/Desktop/1.png");
-	cv::cvtColor(img0, img0, COLOR_BGR2RGB);
+	cv::cvtColor(img0, img0, cv::COLOR_BGR2RGB);
 	QImage Qtemp = QImage((const unsigned char*)(img0.data), img0.cols, img0.rows, img0.step, QImage::Format_RGB888);
 	ui.label->setPixmap(QPixmap::fromImage(Qtemp));
 	ui.label->setScaledContents(1);
 
 	cam = new DahengCamera();//实例化相机
-
+	my_config = new my_Configuration();
+	my_config->confThreshold = 0.5;
+	my_config->nmsThreshold = 0.3;
+	my_config->objThreshold = 0.5;
+	/*my_output = new Output;*/
 	IsCamOpen_flag = 0;//相机成功打开标志位 未打开0 打开1
 	IsCamAcq_flag = 0;//相机采集标志位 未采集0 采集1
 	IsDetect_flag = 0;//检测标志位 未检测0，检测1
@@ -60,6 +66,7 @@ QTyoloWindow::~QTyoloWindow()
 {
 	delete cam;//释放堆上的内存
 	delete timer;
+	delete my_config;
 }
 //清空状态栏槽函数
 void QTyoloWindow::bp_clearMessage_clicked()
@@ -142,7 +149,7 @@ void QTyoloWindow::timerTimeout()
 				cv::imshow("text", image_);
 			}
 			//将相机采集的图片每隔一段时间刷新在label上
-			cv::cvtColor(image_, image_, COLOR_BGR2RGB);
+			cv::cvtColor(image_, image_, cv::COLOR_BGR2RGB);
 			QImage Qtemp = QImage((const unsigned char*)(image_.data), image_.cols, image_.rows, image_.step, QImage::Format_RGB888);
 			ui.label->setPixmap(QPixmap::fromImage(Qtemp));
 			ui.label->setScaledContents(1);
@@ -151,11 +158,22 @@ void QTyoloWindow::timerTimeout()
 		else if ((IsCamAcq_flag == 1) && (IsDetect_flag == 1))
 		{
 			cv::Mat img1 = cv::imread("C:/Users/tianmingYun/Desktop/2.PNG");
-			cv::cvtColor(img1, img1, COLOR_BGR2RGB);
+			cv::cvtColor(img1, img1, cv::COLOR_BGR2RGB);
 			QImage Qtemp = QImage((const unsigned char*)(img1.data), img1.cols, img1.rows, img1.step, QImage::Format_RGB888);
 			ui.label->setPixmap(QPixmap::fromImage(Qtemp));
 			ui.label->setScaledContents(1);
 		}
+	}
+}
+
+void QTyoloWindow::bp_choose_classes()
+{
+	QString filePath = QFileDialog::getOpenFileName(nullptr, "Select a file", "", "Text Files (*.txt)");
+
+	if (!filePath.isEmpty())
+	{
+		ui.choose_weight_3->setText(filePath);// 文件路径不为空，可以进行相应操作
+		this->classesPathStr = filePath.toStdString();  //把QString转化为String
 	}
 }
 void QTyoloWindow::bp_choose_weight()
@@ -166,6 +184,10 @@ void QTyoloWindow::bp_choose_weight()
 	{
 		ui.choose_weight->setText(filePath);// 文件路径不为空，可以进行相应操作
 		ui.choose_weight_2->setText(filePath);
+		string str = filePath.toStdString();  //把QString转化为String
+		my_config->modelpath = str;
+		myYOLO = new YOLO(*my_config, false, this->classesPathStr);
+
 	}
 	/*else
 	{
@@ -228,7 +250,7 @@ void QTyoloWindow::bp_openimg_clicked()
 	// 如果用户选择了文件
 	if (!fileName.isEmpty())
 	{
-		filePathStr = fileName.toStdString();
+		this->imgPathStr = filePathStr = fileName.toStdString();
 		cv::Mat img2 = cv::imread(filePathStr);
 		if (!img2.empty())
 		{
@@ -236,7 +258,7 @@ void QTyoloWindow::bp_openimg_clicked()
 			QString result = str.arg(fileName);
 			ui.textBrowser_image->append(result);//路径显示到状态栏
 
-			cv::cvtColor(img2, img2, COLOR_BGR2RGB);
+			cv::cvtColor(img2, img2, cv::COLOR_BGR2RGB);
 			QImage Qtemp = QImage((const unsigned char*)(img2.data), img2.cols, img2.rows, img2.step, QImage::Format_RGB888);
 			ui.label_image->setPixmap(QPixmap::fromImage(Qtemp));
 			ui.label_image->setScaledContents(1);
@@ -256,7 +278,11 @@ void QTyoloWindow::bp_detoneimg_clicked()
 {
 	if (IsDetoneimg_flg == 1)
 	{
-		cv::Mat img2 = cv::imread(filePathStr);
+		cv::Mat img2 = cv::imread(this->imgPathStr);
+		vector<Output> result;
+		myYOLO->detect(img2, result);
+		myYOLO->drawPred(img2, result, myYOLO->color);
+		cv::cvtColor(img2, img2, cv::COLOR_BGR2RGB);
 		QImage Qtemp = QImage((const unsigned char*)(img2.data), img2.cols, img2.rows, img2.step, QImage::Format_RGB888);
 		ui.label_image_2->setPixmap(QPixmap::fromImage(Qtemp));
 		ui.label_image_2->setScaledContents(1);
@@ -282,7 +308,7 @@ void ImageThread::run()
 				{
 					cv::imshow("text", image_);
 				}
-				cv::cvtColor(image_, image_, COLOR_BGR2RGB);
+				cv::cvtColor(image_, image_, cv::COLOR_BGR2RGB);
 			}
 			//刷新检测的图
 			else if ((caiji_flag == 1) && (detect_flag == 1))

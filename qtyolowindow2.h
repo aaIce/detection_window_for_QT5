@@ -1,6 +1,7 @@
 #pragma once
 #include <QtWidgets/QMainWindow>
 #include "ui_qtyolowindow2.h"
+#include "yolo.h"
 #include <opencv2/opencv.hpp>
 #include <opencv2/core.hpp>
 #include "myDahengCamera.h"
@@ -37,10 +38,14 @@ public:
 	bool IsDetect_flag;//是否开始检测标志位
 	bool IsSaveimg_flag;//是否开始保存标志位
 	bool IsDetoneimg_flg;//是否检测单张标志位
-	std::string filePathStr;//用于接收打开的图片路径
+	string filePathStr;//用于接收打开的图片路径
+	string classesPathStr;//用于类别路径
+	string imgPathStr;//用于接受图片路径
 	DahengCamera* cam;
 	QTimer* timer;
-
+	YOLO* myYOLO;
+	my_Configuration* my_config;
+	Output* my_output;
 	ImageThread* img_thread;
 
 private:
@@ -64,6 +69,7 @@ private slots:
 	void bp_stopsaveimg_clicked();//结束保存
 	void bp_openimg_clicked();//打开图片
 	void bp_detoneimg_clicked();//检测单张
+	void bp_choose_classes();//加载类别文件
 };
 
 

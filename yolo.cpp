@@ -15,7 +15,7 @@ YOLO::YOLO(my_Configuration config, bool ifcuda, string classnamespath)
 		int b = rand() % 256;
 		int g = rand() % 256;
 		int r = rand() % 256;
-		color.push_back(Scalar(b, g, r));
+		color.push_back(cv::Scalar(b, g, r));
 	}
 
 	if (ifcuda) {
@@ -28,7 +28,7 @@ YOLO::YOLO(my_Configuration config, bool ifcuda, string classnamespath)
 		net.setPreferableTarget(cv::dnn::DNN_TARGET_CPU);
 	}
 
-	this->net = readNet(config.modelpath);
+	this->net = cv::dnn::readNet(config.modelpath);
 }
 
 float YOLO::sigmoid(float x)
@@ -47,13 +47,13 @@ void YOLO::read_classnames(string classnamespath, std::vector<std::string>& clas
 	}
 }
 
-Mat YOLO::resize_image(Mat srcimage, int wigth, int height)
+cv::Mat YOLO::resize_image(cv::Mat srcimage, int wigth, int height)
 {
 
-	Mat img;
+	cv::Mat img;
 	if (srcimage.rows != wigth && srcimage.cols != height)
 	{
-		resize(srcimage, img, Size(wigth, height), INTER_AREA);  //���ĸ�����Ϊ��ֵ����
+		resize(srcimage, img, cv::Size(wigth, height), cv::INTER_AREA);  //���ĸ�����Ϊ��ֵ����
 	}
 	else
 	{
@@ -62,15 +62,15 @@ Mat YOLO::resize_image(Mat srcimage, int wigth, int height)
 	return img;
 }
 
-void YOLO::detect(Mat& image, vector<Output>& output)
+void YOLO::detect(cv::Mat& image, vector<Output>& output)
 {
-	Mat dstimg = resize_image(image, this->width_, this->height_);
-	Mat blob = blobFromImage(dstimg, 1/255.0, Size(this->width_, this->height_), Scalar(0, 0, 0), true, false);
+	cv::Mat dstimg = resize_image(image, this->width_, this->height_);
+	cv::Mat blob = cv::dnn::blobFromImage(dstimg, 1/255.0, cv::Size(this->width_, this->height_), cv::Scalar(0, 0, 0), true, false);
 	this->net.setInput(blob);
-	vector<Mat> outs;
+	vector<cv::Mat> outs;
 	this->net.forward(outs, this->net.getUnconnectedOutLayersNames());
 	//ÿ�㶼�о��ο� ������� ���Ŷ�
-	vector<Rect> boxes;
+	vector<cv::Rect> boxes;
 	vector<int> classIds;
 	vector<float> confidences;
 	float ratioh = (float)image.rows / this->height_;  //�õ������ԭͼ�����ű���
@@ -92,10 +92,10 @@ void YOLO::detect(Mat& image, vector<Output>& output)
 					float obj_conf = sigmoid(pdata[4]);  //��������ĸ���
 					if (obj_conf > this->objThreshold)
 					{
-						Mat scores(1, num_classes, CV_32FC1, pdata + 5);
-						Point classIdPoint;   //���ֵλ��
+						cv::Mat scores(1, num_classes, CV_32FC1, pdata + 5);
+						cv::Point classIdPoint;   //���ֵλ��
 						double max_class_socre;    //��ȡ�������Ӧ������ֵ
-						minMaxLoc(scores, 0, &max_class_socre, 0, &classIdPoint);
+						cv::minMaxLoc(scores, 0, &max_class_socre, 0, &classIdPoint);
 						max_class_socre = sigmoid(max_class_socre);
 						if (max_class_socre > this->confThreshold)
 						{
@@ -107,7 +107,7 @@ void YOLO::detect(Mat& image, vector<Output>& output)
 							int top = (int)(y - 0.5 * h) * ratioh + 0.5;
 							classIds.push_back(classIdPoint.x);
 							confidences.push_back(max_class_socre * obj_conf);
-							boxes.push_back(Rect(left, top, int(w * ratiow), int(h * ratioh)));
+							boxes.push_back(cv::Rect(left, top, int(w * ratiow), int(h * ratioh)));
 						}
 					}
 					pdata += net_width;
@@ -116,7 +116,7 @@ void YOLO::detect(Mat& image, vector<Output>& output)
 		}
 	}
 	vector<int> nms_result;
-	NMSBoxes(boxes, confidences, this->confThreshold, this->nmsThreshold, nms_result);
+	cv::dnn::NMSBoxes(boxes, confidences, this->confThreshold, this->nmsThreshold, nms_result);
 	for (size_t i = 0; i < nms_result.size(); i++)
 	{
 		int idx = nms_result[i];
@@ -130,7 +130,7 @@ void YOLO::detect(Mat& image, vector<Output>& output)
 	waitKey(0);*/
 }
 
-void YOLO::drawPred(Mat& img, vector<Output> result, vector<Scalar> color)   // Draw the predicted bounding box
+void YOLO::drawPred(cv::Mat& img, vector<Output> result, vector<cv::Scalar> color)   // Draw the predicted bounding box
 {
 	for (int i = 0; i < result.size(); i++) {
 		int left, top;
@@ -138,15 +138,15 @@ void YOLO::drawPred(Mat& img, vector<Output> result, vector<Scalar> color)   // 
 		top = result[i].box.y;
 		int color_num = i;
 		rectangle(img, result[i].box, color[result[i].id], 2, 2);
-		string label = format("%.2f", result[i].confidence);
+		string label = cv::format("%.2f", result[i].confidence);
 		label = class_names[result[i].id] + ":" + label;
 
 		int baseLine;
-		Size labelSize = getTextSize(label, FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseLine);
-		top = max(top, labelSize.height);
+		cv::Size labelSize = cv::getTextSize(label, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseLine);
+		top = cv::max(top, labelSize.height);
 		//rectangle(frame, Point(left, top - int(1.5 * labelSize.height)), Point(left + int(1.5 * labelSize.width), top + baseLine), Scalar(0, 255, 0), FILLED);
-		putText(img, label, Point(left, top), FONT_HERSHEY_SIMPLEX, 1, color[result[i].id], 2);
+		putText(img, label, cv::Point(left, top), cv::FONT_HERSHEY_SIMPLEX, 1, color[result[i].id], 2);
 	}
-	imshow("imageshow", img);
-	waitKey();
+	/*imshow("imageshow", img);
+	cv::waitKey();*/
 }

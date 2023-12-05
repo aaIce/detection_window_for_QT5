@@ -1,13 +1,13 @@
 /********************************************************************************
-** Form generated from reading UI file 'qtyolowindow2opWuUY.ui'
+** Form generated from reading UI file 'qtyolowindow2rNdYzr.ui'
 **
 ** Created by: Qt User Interface Compiler version 5.15.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef QTYOLOWINDOW2OPWUUY_H
-#define QTYOLOWINDOW2OPWUUY_H
+#ifndef QTYOLOWINDOW2RNDYZR_H
+#define QTYOLOWINDOW2RNDYZR_H
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
@@ -45,6 +45,8 @@ public:
 	QPushButton *clear_state_btn;
 	QLabel *choose_weight;
 	QPushButton *load_model_btn;
+	QLabel *choose_weight_3;
+	QPushButton *choose_classes_btn;
 	QWidget *tab_4;
 	QPushButton *end_save_btn;
 	QPushButton *start_save_btn;
@@ -132,7 +134,7 @@ public:
 			"border-bottom: 2px solid rgb(140,171,234);"));
 		textBrowser = new QTextBrowser(tab);
 		textBrowser->setObjectName(QString::fromUtf8("textBrowser"));
-		textBrowser->setGeometry(QRect(760, 310, 411, 551));
+		textBrowser->setGeometry(QRect(760, 360, 411, 501));
 		QFont font;
 		font.setFamily(QString::fromUtf8("\345\276\256\350\275\257\351\233\205\351\273\221"));
 		font.setPointSize(12);
@@ -150,7 +152,7 @@ public:
 			"border-bottom: 2px solid rgb(140,171,234);"));
 		label_state = new QLabel(tab);
 		label_state->setObjectName(QString::fromUtf8("label_state"));
-		label_state->setGeometry(QRect(770, 280, 121, 31));
+		label_state->setGeometry(QRect(770, 330, 121, 31));
 		QFont font1;
 		font1.setFamily(QString::fromUtf8("\345\276\256\350\275\257\351\233\205\351\273\221"));
 		font1.setPointSize(14);
@@ -163,27 +165,27 @@ public:
 			"}"));
 		line_2 = new QFrame(tab);
 		line_2->setObjectName(QString::fromUtf8("line_2"));
-		line_2->setGeometry(QRect(900, 290, 271, 20));
+		line_2->setGeometry(QRect(900, 340, 271, 20));
 		line_2->setFrameShape(QFrame::HLine);
 		line_2->setFrameShadow(QFrame::Sunken);
 		line_3 = new QFrame(tab);
 		line_3->setObjectName(QString::fromUtf8("line_3"));
-		line_3->setGeometry(QRect(750, 290, 21, 20));
+		line_3->setGeometry(QRect(750, 340, 21, 20));
 		line_3->setFrameShape(QFrame::HLine);
 		line_3->setFrameShadow(QFrame::Sunken);
 		line_4 = new QFrame(tab);
 		line_4->setObjectName(QString::fromUtf8("line_4"));
-		line_4->setGeometry(QRect(740, 300, 21, 561));
+		line_4->setGeometry(QRect(740, 350, 21, 511));
 		line_4->setFrameShape(QFrame::VLine);
 		line_4->setFrameShadow(QFrame::Sunken);
 		tabWidget_2 = new QTabWidget(tab);
 		tabWidget_2->setObjectName(QString::fromUtf8("tabWidget_2"));
-		tabWidget_2->setGeometry(QRect(760, 10, 421, 261));
+		tabWidget_2->setGeometry(QRect(760, 10, 421, 301));
 		tab_3 = new QWidget();
 		tab_3->setObjectName(QString::fromUtf8("tab_3"));
 		end_dec_btn = new QPushButton(tab_3);
 		end_dec_btn->setObjectName(QString::fromUtf8("end_dec_btn"));
-		end_dec_btn->setGeometry(QRect(310, 126, 101, 41));
+		end_dec_btn->setGeometry(QRect(310, 166, 101, 41));
 		end_dec_btn->setFont(font);
 		end_dec_btn->setStyleSheet(QString::fromUtf8("\n"
 			"\n"
@@ -193,7 +195,7 @@ public:
 			"}"));
 		close_btn = new QPushButton(tab_3);
 		close_btn->setObjectName(QString::fromUtf8("close_btn"));
-		close_btn->setGeometry(QRect(30, 126, 101, 41));
+		close_btn->setGeometry(QRect(30, 166, 101, 41));
 		close_btn->setFont(font);
 		close_btn->setStyleSheet(QString::fromUtf8("\n"
 			"#close_btn:pressed{\n"
@@ -202,7 +204,7 @@ public:
 			"}"));
 		start_btn = new QPushButton(tab_3);
 		start_btn->setObjectName(QString::fromUtf8("start_btn"));
-		start_btn->setGeometry(QRect(170, 66, 101, 41));
+		start_btn->setGeometry(QRect(170, 106, 101, 41));
 		start_btn->setFont(font);
 		start_btn->setStyleSheet(QString::fromUtf8("#start_btn:pressed{\n"
 			"	padding-top:5px;\n"
@@ -211,7 +213,7 @@ public:
 			""));
 		start_dec_btn = new QPushButton(tab_3);
 		start_dec_btn->setObjectName(QString::fromUtf8("start_dec_btn"));
-		start_dec_btn->setGeometry(QRect(310, 66, 101, 41));
+		start_dec_btn->setGeometry(QRect(310, 106, 101, 41));
 		start_dec_btn->setFont(font);
 		start_dec_btn->setStyleSheet(QString::fromUtf8("#start_dec_btn:pressed{\n"
 			"	padding-top:5px;\n"
@@ -221,7 +223,7 @@ public:
 			""));
 		open_btn = new QPushButton(tab_3);
 		open_btn->setObjectName(QString::fromUtf8("open_btn"));
-		open_btn->setGeometry(QRect(30, 66, 101, 41));
+		open_btn->setGeometry(QRect(30, 106, 101, 41));
 		open_btn->setFont(font);
 		open_btn->setStyleSheet(QString::fromUtf8("#open_btn:pressed{\n"
 			"	padding-top:5px;\n"
@@ -229,7 +231,7 @@ public:
 			"}"));
 		end_btn = new QPushButton(tab_3);
 		end_btn->setObjectName(QString::fromUtf8("end_btn"));
-		end_btn->setGeometry(QRect(170, 126, 101, 41));
+		end_btn->setGeometry(QRect(170, 166, 101, 41));
 		end_btn->setFont(font);
 		end_btn->setStyleSheet(QString::fromUtf8("\n"
 			"\n"
@@ -239,7 +241,7 @@ public:
 			"}"));
 		clear_state_btn = new QPushButton(tab_3);
 		clear_state_btn->setObjectName(QString::fromUtf8("clear_state_btn"));
-		clear_state_btn->setGeometry(QRect(310, 180, 101, 41));
+		clear_state_btn->setGeometry(QRect(310, 220, 101, 41));
 		clear_state_btn->setFont(font);
 		clear_state_btn->setStyleSheet(QString::fromUtf8("\n"
 			"\n"
@@ -249,7 +251,7 @@ public:
 			"}"));
 		choose_weight = new QLabel(tab_3);
 		choose_weight->setObjectName(QString::fromUtf8("choose_weight"));
-		choose_weight->setGeometry(QRect(40, 10, 351, 21));
+		choose_weight->setGeometry(QRect(40, 40, 351, 21));
 		QFont font2;
 		font2.setFamily(QString::fromUtf8("Times New Roman"));
 		font2.setPointSize(10);
@@ -260,8 +262,23 @@ public:
 			"border-bottom: 2px solid rgb(140,171,234);"));
 		load_model_btn = new QPushButton(tab_3);
 		load_model_btn->setObjectName(QString::fromUtf8("load_model_btn"));
-		load_model_btn->setGeometry(QRect(320, 40, 75, 23));
+		load_model_btn->setGeometry(QRect(320, 70, 75, 23));
 		load_model_btn->setStyleSheet(QString::fromUtf8("#load_model_btn:pressed{\n"
+			"	padding-top:5px;\n"
+			"	padding-left:5px;\n"
+			"}"));
+		choose_weight_3 = new QLabel(tab_3);
+		choose_weight_3->setObjectName(QString::fromUtf8("choose_weight_3"));
+		choose_weight_3->setGeometry(QRect(40, 10, 351, 21));
+		choose_weight_3->setFont(font2);
+		choose_weight_3->setStyleSheet(QString::fromUtf8("border-left: 2px solid rgb(140,171,234);\n"
+			"border-right: 2px solid rgb(140,171,234);\n"
+			"border-top: 2px solid rgb(140,171,234);\n"
+			"border-bottom: 2px solid rgb(140,171,234);"));
+		choose_classes_btn = new QPushButton(tab_3);
+		choose_classes_btn->setObjectName(QString::fromUtf8("choose_classes_btn"));
+		choose_classes_btn->setGeometry(QRect(230, 70, 75, 23));
+		choose_classes_btn->setStyleSheet(QString::fromUtf8("#choose_classes_btn:pressed{\n"
 			"	padding-top:5px;\n"
 			"	padding-left:5px;\n"
 			"}"));
@@ -305,7 +322,7 @@ public:
 		tabWidget_2->addTab(tab_4, QString());
 		line_10 = new QFrame(tab);
 		line_10->setObjectName(QString::fromUtf8("line_10"));
-		line_10->setGeometry(QRect(740, 10, 20, 271));
+		line_10->setGeometry(QRect(740, 10, 20, 291));
 		line_10->setFrameShape(QFrame::VLine);
 		line_10->setFrameShadow(QFrame::Sunken);
 		label2 = new QLabel(tab);
@@ -338,7 +355,7 @@ public:
 		line_12->setFrameShadow(QFrame::Sunken);
 		line_13 = new QFrame(tab);
 		line_13->setObjectName(QString::fromUtf8("line_13"));
-		line_13->setGeometry(QRect(750, 265, 421, 31));
+		line_13->setGeometry(QRect(750, 310, 421, 31));
 		line_13->setFrameShape(QFrame::HLine);
 		line_13->setFrameShadow(QFrame::Sunken);
 		tabWidget->addTab(tab, QString());
@@ -389,7 +406,7 @@ public:
 		line_7->setFrameShadow(QFrame::Sunken);
 		label_state_image = new QLabel(tab_2);
 		label_state_image->setObjectName(QString::fromUtf8("label_state_image"));
-		label_state_image->setGeometry(QRect(770, 280, 81, 31));
+		label_state_image->setGeometry(QRect(770, 280, 111, 31));
 		label_state_image->setFont(font1);
 		label_state_image->setStyleSheet(QString::fromUtf8("#label_state_image {	\n"
 			"	color:rgb(157,191,250);\n"
@@ -415,7 +432,7 @@ public:
 		line_8->setFrameShadow(QFrame::Sunken);
 		line_9 = new QFrame(tab_2);
 		line_9->setObjectName(QString::fromUtf8("line_9"));
-		line_9->setGeometry(QRect(850, 290, 321, 20));
+		line_9->setGeometry(QRect(890, 290, 281, 20));
 		line_9->setFrameShape(QFrame::HLine);
 		line_9->setFrameShadow(QFrame::Sunken);
 		line_16 = new QFrame(tab_2);
@@ -477,6 +494,8 @@ public:
 		clear_state_btn->setText(QCoreApplication::translate("QTyoloWindow2Class", "\346\270\205\347\251\272\344\277\241\346\201\257", nullptr));
 		choose_weight->setText(QString());
 		load_model_btn->setText(QCoreApplication::translate("QTyoloWindow2Class", "\345\212\240\350\275\275\346\250\241\345\236\213", nullptr));
+		choose_weight_3->setText(QString());
+		choose_classes_btn->setText(QCoreApplication::translate("QTyoloWindow2Class", "\351\200\211\346\213\251\347\261\273\345\210\253", nullptr));
 		tabWidget_2->setTabText(tabWidget_2->indexOf(tab_3), QCoreApplication::translate("QTyoloWindow2Class", "\347\233\256\346\240\207\346\243\200\346\265\213", nullptr));
 		end_save_btn->setText(QCoreApplication::translate("QTyoloWindow2Class", "\347\273\223\346\235\237\344\277\235\345\255\230", nullptr));
 		start_save_btn->setText(QCoreApplication::translate("QTyoloWindow2Class", "\344\277\235\345\255\230\345\233\276\347\211\207", nullptr));
@@ -504,4 +523,4 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-#endif // QTYOLOWINDOW2OPWUUY_H
+#endif // QTYOLOWINDOW2RNDYZR_H
